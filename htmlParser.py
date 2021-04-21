@@ -6,10 +6,12 @@ from bs4 import BeautifulSoup
 def main():
     
     path = "./"
-    fileName = "tmf.html"
+    fileName = "rulebreakers.html"
 
-    with open(path+fileName) as html_file:
-        soup = BeautifulSoup(html_file, 'html.parser')
+    with open(path+fileName,"r",encoding='utf-8') as html_file:
+        soup = BeautifulSoup(html_file, 'html.parser', from_encoding='utf-8')
+        #print("hi")
+        
         
     tickerList = soup.find_all("span", class_="ticker")
     print("items = ", len(tickerList))
@@ -17,7 +19,7 @@ def main():
     t2 = list(map(lambda symbol: symbol.text.strip(), tickerList))
     print(t2)    
 
-    with open("output.txt", "w") as txt_file:
+    with open("output_rb.txt", "w") as txt_file:
         for line in t2:
             txt_file.write(line + "\n")
 
