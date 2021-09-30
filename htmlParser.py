@@ -4,6 +4,19 @@ from bs4 import BeautifulSoup
 import os
 
 
+#sometimes the symbolList needs to be corrected because two (or more) symbols are 
+#combined into the same list entry.  so split each one based on a newline character
+#and then add it back to a newly created list
+def fix_list(symbolList):
+    new_symbols_set = set()
+    for symbol in symbolList:
+        symbols = symbol.split("\n")
+        for s in symbols:
+            new_symbols_set.add(s)
+    
+    return list(new_symbols_set)
+
+
 def parseFile(path, fileName):
     
     fileNameParsed = fileName.split(".")[0].split("_")
@@ -27,10 +40,8 @@ def parseFile(path, fileName):
     
     #clean up the symbols list data
     symbolList = list(map(lambda symbol: symbol.text.strip().split(" ")[0].replace(".",""), symbolList))
-    
-    #remove duplicate symbols and sort the list
-    symbolList = list(set(symbolList))
-    symbolList.sort()
+    symbolList = fix_list(symbolList)
+    symbolList.sort()    
 
     #specify the output file location    
     outputFilename = "./Output/stocks_" + tmfFileSource + "_" + tmfFileDate + ".txt"
