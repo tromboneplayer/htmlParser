@@ -1,7 +1,6 @@
-from datetime import datetime, date
-import json
 from bs4 import BeautifulSoup
 import os
+from os.path import basename
 import csv
 
 
@@ -107,7 +106,9 @@ def output_list_to_file(outputFilename, symbolList):
 
 def main():
     
-    print("stocksFileParser started")
+    scriptName = basename(__file__).split(".")[0]
+    print(scriptName + " started")
+    
     path = "./" + folder + "/"  #the folder containing HTML files to parse for The Motley Fool webpages
     files = os.listdir(path)
     
@@ -122,7 +123,7 @@ def main():
         else:
             raise Exception("Unknown file source ==> {s}".format(e=fileSource))
 
-    print("stocksFileParser ended")
+    print(scriptName + " ended")
 
 
 if __name__ == "__main__":
