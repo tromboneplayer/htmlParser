@@ -5,7 +5,33 @@ import os
 import csv
 
 
-def parseCsvFile(path, fileName):
+#folder = "Test"
+folder = "Input"
+
+
+def parseTxtFile(path, fileName):
+    '''parse a txt file for the BCI (Blue Collar Investor stock picks'''
+    fileNameParsed = fileName.split(".")[0].split("_")
+    fileSource = fileNameParsed[0]  #BCI
+    fileDate = fileNameParsed[1]
+    
+    symbolList = list()
+    
+    with open(path+fileName, newline='') as txtfile:
+        rawtext = txtfile.readlines()
+        for row in rawtext:
+            stock = row.split(" ")[0]
+            if stock:
+                symbolList.append(stock)
+        symbolList.sort()
+
+    #specify the output file location
+    outputFilename = "./Output/stocks_" + fileSource + "_" + fileDate + ".txt"
+
+    output_list_to_file(outputFilename, symbolList)
+
+
+def parseCsvFile_ARKK(path, fileName):
     '''parse a csv file for the AARK (Cathie Wood) holdings fund'''
     fileNameParsed = fileName.split(".")[0].split("_")
     fileSource = fileNameParsed[0]  #ARKK
@@ -24,10 +50,8 @@ def parseCsvFile(path, fileName):
 
     #specify the output file location
     outputFilename = "./Output/stocks_" + fileSource + "_" + fileDate + ".txt"
-
-    with open(outputFilename, "w") as txt_file:
-        for symbol in symbolList:
-            txt_file.write(symbol + "\n")
+    
+    output_list_to_file(outputFilename, symbolList)
 
 
 def fix_list(symbolList):
@@ -43,7 +67,7 @@ def fix_list(symbolList):
     return list(new_symbols_set)
 
 
-def parseHtmlFile(path, fileName):
+def parseHtmlFile_TMF(path, fileName):
     
     fileNameParsed = fileName.split(".")[0].split("_")
     tmfFileSource = fileNameParsed[1]  #SA = Stock Advisor; RB = Rule Breakers; BS = Back Stage
@@ -52,14 +76,14 @@ def parseHtmlFile(path, fileName):
     with open(path+fileName,"r",encoding='utf-8') as html_file:
         soup = BeautifulSoup(html_file, 'html.parser', from_encoding='utf-8')
 
-    if tmfFileSource in ["BS", "RB"]:
+    if tmfFileSource.upper() in ["BS", "RB"]:
         tagName = "span"
         className = "ticker"
-    elif tmfFileSource == "SA":
+    elif tmfFileSource.upper() == "SA":
         tagName = "div"
         className = "company-text"
     else:
-        raise Exception("TMF file type unknown")
+        raise Exception("TMF file type unknown ==> {t}".format(t=tmfFileSource))
     
     #get the ticker symbols from the html data
     symbolList = soup.find_all(tagName, class_=className)
@@ -72,25 +96,31 @@ def parseHtmlFile(path, fileName):
     #specify the output file location    
     outputFilename = "./Output/stocks_" + tmfFileSource + "_" + tmfFileDate + ".txt"
 
+    output_list_to_file(outputFilename, symbolList)
+
+
+def output_list_to_file(outputFilename, symbolList):
     with open(outputFilename, "w") as txt_file:
         for symbol in symbolList:
             txt_file.write(symbol + "\n")
-
+    
 
 def main():
     
     print("stocksFileParser started")
-    path = "./Input/"  #the folder containing HTML files to parse for The Motley Fool webpages
+    path = "./" + folder + "/"  #the folder containing HTML files to parse for The Motley Fool webpages
     files = os.listdir(path)
     
     for fileName in files:
         print("Processing {f}...".format(f=fileName))
-        fileExt = fileName.split(".")[1].lower()
-        if fileExt == "htm":
-            #parseHtmlFile(path, fileName)
-            pass
-        if fileExt == "csv":
-            parseCsvFile(path, fileName)
+        fileNameParts = fileName.lower().split(".")
+        fileSource = fileNameParts[0].split("_")[0]
+        if fileSource == "tmf":
+            parseHtmlFile_TMF(path, fileName)
+        elif fileSource == "arkk":
+            parseCsvFile_ARKK(path, fileName)
+        else:
+            raise Exception("Unknown file source ==> {s}".format(e=fileSource))
 
     print("stocksFileParser ended")
 
