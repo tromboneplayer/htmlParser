@@ -78,6 +78,9 @@ def parseHtmlFile_TMF(path, fileName):
     if tmfFileSource.upper() in ["BS", "RB"]:
         tagName = "span"
         className = "ticker"
+    elif tmfFileSource.upper() == "ES":
+        tagName = "span"
+        className = "tmf-content-list__ticker-symbol"
     elif tmfFileSource.upper() == "SA":
         tagName = "div"
         className = "company-text"
