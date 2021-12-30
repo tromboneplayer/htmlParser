@@ -48,7 +48,7 @@ def parseCsvFile_ARKK(path, fileName):
         symbolList.sort()
 
     #specify the output file location
-    outputFilename = "./Output/stocks_" + fileSource + "_" + fileDate + ".txt"
+    outputFilename = f"./Output/stocks_{fileSource}_{fileDate}.txt"
     
     output_list_to_file(outputFilename, symbolList)
 
@@ -96,7 +96,7 @@ def parseHtmlFile_TMF(path, fileName):
     symbolList.sort()    
 
     #specify the output file location    
-    outputFilename = "./Output/stocks_" + tmfFileSource + "_" + tmfFileDate + ".txt"
+    outputFilename = f"./Output/stocks_{tmfFileSource}_{tmfFileDate}.txt"
 
     output_list_to_file(outputFilename, symbolList)
 
@@ -110,7 +110,7 @@ def output_list_to_file(outputFilename, symbolList):
 def main():
     
     scriptName = basename(__file__).split(".")[0]
-    print(scriptName + " started")
+    print(f"{scriptName} started")
     
     path = "./" + folder + "/"  #the folder containing HTML files to parse for The Motley Fool webpages
     files = os.listdir(path)
@@ -126,7 +126,7 @@ def main():
         else:
             raise Exception("Unknown file source ==> {s}".format(e=fileSource))
 
-    print(scriptName + " ended")
+    print(f"{scriptName} ended")
 
 
 if __name__ == "__main__":
