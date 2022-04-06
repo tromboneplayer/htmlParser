@@ -67,6 +67,31 @@ def fix_list(symbolList):
     return list(new_symbols_set)
 
 
+def parseHtmlFile_DA(path, fileName):
+    fileNameParsed = fileName.split(".")[0].split("_")
+    tmfFileSource = fileNameParsed[1]  #SA = Stock Advisor; RB = Rule Breakers; BS = Back Stage
+    tmfFileDate = fileNameParsed[2]
+
+    with open(path+fileName,"r",encoding='utf-8') as html_file:
+        soup = BeautifulSoup(html_file, 'html.parser', from_encoding='utf-8')
+
+    tagName = "div"
+    className = "ticker-area"
+    
+    #get the ticker symbols from the html data
+    symbolList = soup.find_all(tagName, class_=className)
+    
+    #clean up the symbols list data
+    symbolList = list(map(lambda symbol: symbol.text.strip().split(" ")[0].replace(".",""), symbolList))
+    symbolList = fix_list(symbolList)
+    symbolList.sort()
+
+    #specify the output file location    
+    outputFilename = f"./Output/stocks_{tmfFileSource}_{tmfFileDate}.txt"
+
+    output_list_to_file(outputFilename, symbolList)
+    
+
 def parseHtmlFile_TMF(path, fileName):
     
     fileNameParsed = fileName.split(".")[0].split("_")
@@ -123,10 +148,12 @@ def main():
         print(f"Processing {fileName}...")
         fileNameParts = fileName.lower().split(".")
         fileSource = fileNameParts[0].split("_")[0]
-        if fileSource == "tmf":
+        if fileSource == "tmf": #tmf = the motley fool website
             parseHtmlFile_TMF(path, fileName)
-        elif fileSource == "arkk":
+        elif fileSource == "arkk": #arkk = ARK funds website
             parseCsvFile_ARKK(path, fileName)
+        elif fileSource == "mb": #mb = market beat website
+            parseHtmlFile_DA(path, fileName)
         else:
             raise Exception(f"Unknown file source ==> {fileSource}")
 
