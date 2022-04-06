@@ -1,3 +1,4 @@
+from fileinput import filename
 from bs4 import BeautifulSoup
 import os
 from os.path import basename
@@ -44,7 +45,7 @@ def parseCsvFile_ARKK(path, fileName):
             stock = row[3]
             if stock:
                 symbolList.append(stock)
-        del(symbolList[0])
+        del(symbolList[0]) #delete the "ticker" column header
         symbolList.sort()
 
     #specify the output file location
@@ -119,7 +120,7 @@ def main():
     files = os.listdir(path)
     
     for fileName in files:
-        print("Processing {f}...".format(f=fileName))
+        print(f"Processing {fileName}...")
         fileNameParts = fileName.lower().split(".")
         fileSource = fileNameParts[0].split("_")[0]
         if fileSource == "tmf":
@@ -127,7 +128,7 @@ def main():
         elif fileSource == "arkk":
             parseCsvFile_ARKK(path, fileName)
         else:
-            raise Exception("Unknown file source ==> {s}".format(e=fileSource))
+            raise Exception(f"Unknown file source ==> {fileSource}")
 
     print(f"{scriptName} ended")
 
