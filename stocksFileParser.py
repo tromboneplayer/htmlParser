@@ -6,7 +6,7 @@ import csv
 
 
 #folder = "Test"
-folder = "Input"
+folder = "Input_TMF"
 
 
 def parseTxtFile(path, fileName):
@@ -97,7 +97,7 @@ def parseHtmlFile_TMF(path, fileName):
     fileNameParsed = fileName.split(".")[0].split("_")
     tmfFileSource = fileNameParsed[1]  #SA = Stock Advisor; RB = Rule Breakers; BS = Back Stage
     tmfFileDate = fileNameParsed[2]
-        
+
     with open(path+fileName,"r",encoding='utf-8') as html_file:
         soup = BeautifulSoup(html_file, 'html.parser', from_encoding='utf-8')
 
