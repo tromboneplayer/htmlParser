@@ -108,8 +108,8 @@ def parseHtmlFile_TMF(path, fileName):
         tagName = "span"
         className = "ticker"
     elif tmfFileSource.upper() == "ES":
-        tagName = "button"
-        className = "uppercase"
+        tagName = "span"
+        className = "ticker"
     elif tmfFileSource.upper() == "SA":
         tagName = "div"
         className = "company-text"
