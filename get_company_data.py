@@ -22,8 +22,12 @@ def get_webpage(url, symbol):
         webpage = requests.get(url, headers={"User-Agent": user_agent})
         if webpage.status_code == 200:
             return webpage
+        else:
+            msg = f"get_webpage: Page get error: {webpage.status_code}"
+            print(msg)
+            raise Exception(msg)
     except Exception as e:
-        print(f"get_webpage: page not found for {symbol}")
+        print(f"get_webpage: Page not found for {symbol}")
         raise e
 
 
