@@ -9,7 +9,7 @@ import string
 
 folder = "Input_YF" #for reading the Yahoo Finance website
 
-yahoo_url = "https://finance.yahoo.com/quote/{s}?p={s}"
+# yahoo_url = "https://finance.yahoo.com/quote/{s}?p={s}"
 yahoo_url_profile = "https://finance.yahoo.com/quote/{s}/profile?p={s}"
 
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"
@@ -31,7 +31,7 @@ def parse_stock_page_YF(webpage):
     
     soup = BeautifulSoup(webpage.content, 'html.parser', from_encoding='utf-8')
     
-    pattern = re.compile(r'\s--\sData\s--\s')
+    pattern = re.compile(r'\s--\sData\s--\s') #raw string
     
     try:
         script_data = soup.find('script', text=pattern).contents[0]
