@@ -28,7 +28,7 @@ def get_webpage(url, symbol):
             raise Exception(msg)
     except Exception as e:
         print(f"get_webpage: Page not found for {symbol}")
-        raise e
+        return None
 
 
 def parse_stock_page_YF(webpage):
@@ -69,25 +69,32 @@ def process_file(symbols_file):
         symbol = symbol.strip()
         print(f"Processing symbol...{symbol}")
         webpage = get_webpage(yahoo_url_profile, symbol)
-        company_profile = parse_stock_page_YF(webpage)
-        if company_profile:
-            try:
-                sector = company_profile["sector"]
-                industry = company_profile["industry"]
-                for letter in industry:
-                    if letter not in string.printable:
-                        industry = fix_unprintable(industry)
-                        continue
-            except KeyError as e:
-                sector = "n/a"
-                industry = "n/a"
-            except Exception as e:
-                print(f"process_file: Exception reading company profile data {e}")
-                raise e
-        else:
+        if not webpage:
             sector = "n/a"
             industry = "n/a"
+            output_data.append((symbol, sector, industry))
+            continue
+        company_profile = parse_stock_page_YF(webpage)
+        if not company_profile:
+            sector = "n/a"
+            industry = "n/a"
+            output_data.append((symbol, sector, industry))
+            continue
+        try:
+            sector = company_profile["sector"]
+            industry = company_profile["industry"]
+            for letter in industry:
+                if letter not in string.printable:
+                    industry = fix_unprintable(industry)
+                    continue
+        except KeyError as e:
+            sector = "n/a"
+            industry = "n/a"
+        except Exception as e:
+            print(f"process_file: Exception reading company profile data {e}")
+            raise e
         output_data.append((symbol, sector, industry))
+
 
     outputFilename = f"./Output/company_data.txt"
     output_list_to_file(outputFilename, output_data)
