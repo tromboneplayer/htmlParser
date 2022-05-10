@@ -1,8 +1,6 @@
-from fileinput import filename
 from bs4 import BeautifulSoup
 import os
 from os.path import basename
-import csv
 
 
 #folder = "Test"
@@ -28,29 +26,6 @@ def parseTxtFile(path, fileName):
     #specify the output file location
     outputFilename = "./Output/stocks_" + fileSource + "_" + fileDate + ".txt"
 
-    output_list_to_file(outputFilename, symbolList)
-
-
-def parseCsvFile_ARKK(path, fileName):
-    '''parse a csv file for the AARK (Cathie Wood) holdings fund'''
-    fileNameParsed = fileName.split(".")[0].split("_")
-    fileSource = fileNameParsed[0]  #ARKK
-    fileDate = fileNameParsed[2]
-    
-    symbolList = list()
-    
-    with open(path+fileName, newline='') as csvfile:
-        spamreader = csv.reader(csvfile, delimiter=',', quotechar='"')
-        for row in spamreader:
-            stock = row[3]
-            if stock:
-                symbolList.append(stock)
-        del(symbolList[0]) #delete the "ticker" column header
-        symbolList.sort()
-
-    #specify the output file location
-    outputFilename = f"./Output/stocks_{fileSource}_{fileDate}.txt"
-    
     output_list_to_file(outputFilename, symbolList)
 
 
@@ -141,8 +116,6 @@ def main():
         fileSource = fileNameParts[0].split("_")[0]
         if fileSource == "tmf": #tmf = the motley fool website
             parseHtmlFile_TMF(path, fileName)
-        elif fileSource == "arkk": #arkk = ARK funds website
-            parseCsvFile_ARKK(path, fileName)
         elif fileSource == "mb": #mb = market beat website
             parseHtmlFile_DA(path, fileName)
         else:
