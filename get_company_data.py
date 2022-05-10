@@ -55,7 +55,7 @@ def output_list_to_file(outputFilename, output_data):
 
 
 def fix_unprintable(string_parm):
-    return string_parm.replace(chr(8212), "-")
+    return string_parm.replace(chr(8212), "-") #8212 is an emdash, repace with a regular en dash
 
 
 def process_file(symbols_file):
@@ -95,7 +95,7 @@ def main():
     print(f"{scriptName} started")
     
     path = "./" + folder + "/"  #the folder containing symbol file to lookup
-    symbols_file = os.listdir(path)[0]
+    symbols_file = os.listdir(path)[0] #just process the first file
     # fileNameParts = symbols_file.lower().split(".")
     # fileSource = fileNameParts[0].split("_")[0]
 
