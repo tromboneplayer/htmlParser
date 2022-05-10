@@ -95,7 +95,7 @@ def parseHtmlFile_DA(path, fileName):
 def parseHtmlFile_TMF(path, fileName):
     
     fileNameParsed = fileName.split(".")[0].split("_")
-    tmfFileSource = fileNameParsed[1]  #SA = Stock Advisor; RB = Rule Breakers; BS = Back Stage
+    tmfFileSource = fileNameParsed[1]  #SA = Stock Advisor; RB = Rule Breakers; BS = Back Stage, TI = Total Income, ES = Everlasting Stocks
     tmfFileDate = fileNameParsed[2]
 
     with open(path+fileName,"r",encoding='utf-8') as html_file:
