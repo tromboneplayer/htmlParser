@@ -1,4 +1,4 @@
-# stocksFileParser
+# stocks_file_parser
 # find the Download CSV link
 # RB - Rule Breaker from The Motley Fool - LINK ==> https://www.fool.com/premium/backstage/services/rulebreakersinclusion
 # SA - Stock Advisor from The Motley Fool - LINK ==> https://www.fool.com/premium/backstage/services/stockadvisor
