@@ -101,18 +101,9 @@ def parseHtmlFile_TMF(path, fileName):
     with open(path+fileName,"r",encoding='utf-8') as html_file:
         soup = BeautifulSoup(html_file, 'html.parser', from_encoding='utf-8')
 
-    if tmfFileSource.upper() == "BS":
+    if tmfFileSource.upper() in ["BS", "RB", "ES", "SA", "TI"]:
         tagName = "button"
         className = "uppercase"
-    elif tmfFileSource.upper() == "RB":
-        tagName = "span"
-        className = "ticker"
-    elif tmfFileSource.upper() == "ES":
-        tagName = "span"
-        className = "ticker"
-    elif tmfFileSource.upper() == "SA":
-        tagName = "div"
-        className = "company-text"
     else:
         raise Exception("TMF file type unknown ==> {t}".format(t=tmfFileSource))
     
