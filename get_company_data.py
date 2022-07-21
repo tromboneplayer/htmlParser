@@ -1,5 +1,6 @@
 import os
 from os.path import basename
+from utilities.util import log_util
 from services.services import process_file
 from configs.config import INPUT_FOLDER_YF, OUTPUT_FILENAME, INPUT_FILE_YF
 
@@ -7,7 +8,7 @@ from configs.config import INPUT_FOLDER_YF, OUTPUT_FILENAME, INPUT_FILE_YF
 def main():
     
     scriptName = basename(__file__).split(".")[0]
-    print(f"{scriptName} started")
+    log_util(f"{scriptName} started", "INFO")
     
     path = "./" + INPUT_FOLDER_YF + "/"  #the folder containing symbol file to lookup
     # symbols_file = os.listdir(path)[0] #just process the first file
@@ -24,7 +25,7 @@ def main():
             industry = company_profile["industry"]
             txt_file.write(f"{symbol}%{sector}%{industry}"+ "\n")
 
-    print(f"{scriptName} ended")
+    log_util(f"{scriptName} ended", "INFO")
 
 
 if __name__ == "__main__":

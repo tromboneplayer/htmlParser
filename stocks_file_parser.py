@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import os
 from os.path import basename
+from utilities.util import log_util
 from configs.config import INPUT_FOLDER_TMF
 
 
@@ -102,13 +103,13 @@ def output_list_to_file(OUTPUT_FILENAME, symbolList):
 def main():
     
     scriptName = basename(__file__).split(".")[0]
-    print(f"{scriptName} started")
+    log_util(f"{scriptName} started", "INFO")
     
     path = "./" + INPUT_FOLDER_TMF + "/"  #the folder containing HTML files to parse for The Motley Fool webpages
     files = os.listdir(path)
     
     for fileName in files:
-        print(f"Processing {fileName}...")
+        log_util(f"Processing {fileName}...", "INFO")
         fileNameParts = fileName.lower().split(".")
         fileSource = fileNameParts[0].split("_")[0]
         if fileSource == "tmf": #tmf = the motley fool website
@@ -118,7 +119,7 @@ def main():
         else:
             raise Exception(f"Unknown file source ==> {fileSource}")
 
-    print(f"{scriptName} ended")
+    log_util(f"{scriptName} ended", "INFO")
 
 
 if __name__ == "__main__":

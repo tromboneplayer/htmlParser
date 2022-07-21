@@ -3,7 +3,7 @@ import re
 import json
 import yfinance as yf
 from bs4 import BeautifulSoup 
-from utilities.util import fix_unprintable
+from utilities.util import fix_unprintable, log_util
 from configs.config import YAHOO_URL_PROFILE, USER_AGENT, USE_YF_LIBRARY, NOT_AVAILABLE
 
 
@@ -16,10 +16,11 @@ def _get_webpage(symbol):
             return webpage
         else:
             msg = f"_get_webpage: Page get error: {webpage.status_code}"
-            print(msg)
+            log_util(msg, "ERROR")
             raise Exception(msg)
     except Exception as e:
-        print(f"_get_webpage: Page not found for {symbol}")
+        msg = f"_get_webpage: Page not found for {symbol}"
+        log_util(msg, "ERROR")
         return None
 
 
@@ -39,7 +40,8 @@ def _parse_stock_page_YF(webpage):
     except KeyError as e:
         asset_profile = None
     except Exception as e:
-        print(f"_parse_stock_page_YF: Error parsing Yahoo Finance data. Exception {e}")
+        msg = f"_parse_stock_page_YF: Error parsing Yahoo Finance data. Exception {e}"
+        log_util(msg, "ERROR")
         raise e
 
     return asset_profile
@@ -50,9 +52,10 @@ def get_company_profile_web_api(symbol: str) -> dict:
     
     if not symbol:
         msg = f"get_company_profile_web_api: Exception reading company profile data. No symbol provided."
+        log_util(msg, "ERROR")
         raise Exception(msg)
         
-    print(f"getting data for {symbol}")
+    log_util(f"getting data for {symbol}", "INFO")
 
     if USE_YF_LIBRARY:
         return _get_company_profile_library(symbol)
@@ -81,7 +84,8 @@ def _get_company_profile_web(symbol: str) -> dict:
     except KeyError as e:
         return {"symbol": symbol, "sector":NOT_AVAILABLE, "industry":NOT_AVAILABLE}
     except Exception as e:
-        print(f"_get_company_profile_web: Exception reading company profile data {e}")
+        msg = f"_get_company_profile_web: Exception reading company profile data {e}"
+        log_util(msg, "ERROR")
         raise e
 
 
@@ -102,5 +106,5 @@ def _get_company_profile_library(symbol: str) -> dict:
         return {"symbol": symbol, "sector":NOT_AVAILABLE, "industry":NOT_AVAILABLE}
     except Exception as e:
         msg = f"_get_company_profile_library: Exception reading company profile data {e}"
-        print(msg)
+        log_util(msg, "ERROR")
         raise e
