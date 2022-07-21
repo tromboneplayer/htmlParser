@@ -18,7 +18,7 @@ def log_util(message, level="INFO"):
     timestampStr = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
     #timestampStr = dateTimeObj.strftime("%Y-%m-%d %H:%M:%S.%f")
 
-    log_util(timestampStr, level, message)
+    print(timestampStr, level, message)
     
     if logger is None:
         log_config()
