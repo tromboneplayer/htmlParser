@@ -1,10 +1,7 @@
 from bs4 import BeautifulSoup
 import os
 from os.path import basename
-
-
-#folder = "Test"
-folder = "Input_TMF"
+from configs.config import INPUT_FOLDER_TMF
 
 
 def parseTxtFile(path, fileName):
@@ -24,9 +21,9 @@ def parseTxtFile(path, fileName):
         symbolList.sort()
 
     #specify the output file location
-    outputFilename = "./Output/stocks_" + fileSource + "_" + fileDate + ".txt"
+    OUTPUT_FILENAME = "./Output/stocks_" + fileSource + "_" + fileDate + ".txt"
 
-    output_list_to_file(outputFilename, symbolList)
+    output_list_to_file(OUTPUT_FILENAME, symbolList)
 
 
 def fix_list(symbolList):
@@ -62,9 +59,9 @@ def parseHtmlFile_DA(path, fileName):
     symbolList.sort()
 
     #specify the output file location    
-    outputFilename = f"./Output/stocks_{tmfFileSource}_{tmfFileDate}.txt"
+    OUTPUT_FILENAME = f"./Output/stocks_{tmfFileSource}_{tmfFileDate}.txt"
 
-    output_list_to_file(outputFilename, symbolList)
+    output_list_to_file(OUTPUT_FILENAME, symbolList)
     
 
 def parseHtmlFile_TMF(path, fileName):
@@ -91,13 +88,13 @@ def parseHtmlFile_TMF(path, fileName):
     symbolList.sort()    
 
     #specify the output file location    
-    outputFilename = f"./Output/stocks_{tmfFileSource}_{tmfFileDate}.txt"
+    OUTPUT_FILENAME = f"./Output/stocks_{tmfFileSource}_{tmfFileDate}.txt"
 
-    output_list_to_file(outputFilename, symbolList)
+    output_list_to_file(OUTPUT_FILENAME, symbolList)
 
 
-def output_list_to_file(outputFilename, symbolList):
-    with open(outputFilename, "w") as txt_file:
+def output_list_to_file(OUTPUT_FILENAME, symbolList):
+    with open(OUTPUT_FILENAME, "w") as txt_file:
         for symbol in symbolList:
             txt_file.write(symbol + "\n")
     
@@ -107,7 +104,7 @@ def main():
     scriptName = basename(__file__).split(".")[0]
     print(f"{scriptName} started")
     
-    path = "./" + folder + "/"  #the folder containing HTML files to parse for The Motley Fool webpages
+    path = "./" + INPUT_FOLDER_TMF + "/"  #the folder containing HTML files to parse for The Motley Fool webpages
     files = os.listdir(path)
     
     for fileName in files:
