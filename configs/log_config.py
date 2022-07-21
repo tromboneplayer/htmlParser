@@ -9,3 +9,4 @@ if ".py" in module_name:
 LOG_FORMAT = "%(levelname)s %(asctime)s: %(message)s"
 LOG_FILE = f"{path[0]}\log\{module_name}.log"
 LOG_LEVEL = logging.INFO
+LOG_TIMESTAMP = "%Y-%m-%d %H:%M:%S.%f"

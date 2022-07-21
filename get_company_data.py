@@ -1,6 +1,6 @@
 import os
 from os.path import basename
-from utilities.util import log_util
+from utilities.logging_util import log_util
 from services.services import process_file
 from configs.config import INPUT_FOLDER_YF, OUTPUT_FILENAME, INPUT_FILE_YF
 

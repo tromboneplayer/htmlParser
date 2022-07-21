@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import os
 from os.path import basename
-from utilities.util import log_util
+from utilities.logging_util import log_util
 from configs.config import INPUT_FOLDER_TMF
 
 
