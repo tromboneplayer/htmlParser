@@ -15,10 +15,13 @@ def main():
     # fileSource = fileNameParts[0].split("_")[0]
 
     with open(path+INPUT_FILE_YF,"r",encoding='utf-8') as symbols_file:
-        output_data = process_file(symbols_file)
+        company_profile_data = process_file(symbols_file)
     
     with open(OUTPUT_FILENAME, "w") as txt_file:
-        for symbol, sector, industry in output_data:
+        for company_profile in company_profile_data:
+            symbol = company_profile["symbol"]
+            sector = company_profile["sector"]
+            industry = company_profile["industry"]
             txt_file.write(f"{symbol}%{sector}%{industry}"+ "\n")
 
     print(f"{scriptName} ended")

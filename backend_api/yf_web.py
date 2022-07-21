@@ -45,8 +45,13 @@ def _parse_stock_page_YF(webpage):
     return asset_profile
 
 
-def get_company_profile(symbol: str) -> tuple:
+def get_company_profile_web_api(symbol: str) -> dict:
+    '''Given a symbol, use the Yahoo Finance website or API to retrieve company profile information.  This includes the sector and industry data.'''
     
+    if not symbol:
+        msg = f"get_company_profile_web_api: Exception reading company profile data. No symbol provided."
+        raise Exception(msg)
+        
     print(f"getting data for {symbol}")
 
     if USE_YF_LIBRARY:
@@ -55,7 +60,7 @@ def get_company_profile(symbol: str) -> tuple:
         return _get_company_profile_web(symbol)
 
 
-def _get_company_profile_web(symbol: str) -> tuple:
+def _get_company_profile_web(symbol: str) -> dict:
     '''Get the company profile data using the Yahoo Finance website.'''
         
     webpage = _get_webpage(symbol)
@@ -66,35 +71,35 @@ def _get_company_profile_web(symbol: str) -> tuple:
     company_profile = _parse_stock_page_YF(webpage)
     
     if not company_profile:
-        return (symbol, NOT_AVAILABLE, NOT_AVAILABLE)
+        return {"symbol": symbol, "sector":NOT_AVAILABLE, "industry":NOT_AVAILABLE}
     
     try:
         sector = company_profile["sector"]
         industry = company_profile["industry"]
         industry = fix_unprintable(industry)
-        return (symbol, sector, industry)
+        return {"symbol": symbol, "sector":sector, "industry":industry}
     except KeyError as e:
-        return (symbol, NOT_AVAILABLE, NOT_AVAILABLE)
+        return {"symbol": symbol, "sector":NOT_AVAILABLE, "industry":NOT_AVAILABLE}
     except Exception as e:
         print(f"_get_company_profile_web: Exception reading company profile data {e}")
         raise e
 
 
-def _get_company_profile_library(symbol: str) -> tuple:
+def _get_company_profile_library(symbol: str) -> dict:
     '''Get the company profile data using the Yahoo Finance python library.  This is slower than the web method, but an easier implementation.'''
     
     company_profile = yf.Ticker(symbol)
 
     if not company_profile:
-        return (symbol, NOT_AVAILABLE, NOT_AVAILABLE)
+        return {"symbol": symbol, "sector":NOT_AVAILABLE, "industry":NOT_AVAILABLE}
 
     try:
         sector = company_profile.info["sector"]
         industry = company_profile.info["industry"]
         industry = fix_unprintable(industry)
-        return (symbol, sector, industry)
+        return {"symbol": symbol, "sector":sector, "industry":industry}
     except KeyError as e:
-        return (symbol, NOT_AVAILABLE, NOT_AVAILABLE)
+        return {"symbol": symbol, "sector":NOT_AVAILABLE, "industry":NOT_AVAILABLE}
     except Exception as e:
         msg = f"_get_company_profile_library: Exception reading company profile data {e}"
         print(msg)
