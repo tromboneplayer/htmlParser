@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import os
 from os.path import basename
 from utilities.logging_util import log_util
-from configs.config import INPUT_FOLDER_TMF
+from configs.config import INPUT_FOLDER_TMF, OUTPUT_FOLDER_TMF
 
 
 def parseTxtFile(path, fileName):
@@ -22,9 +22,9 @@ def parseTxtFile(path, fileName):
         symbolList.sort()
 
     #specify the output file location
-    OUTPUT_FILENAME = "./Output/stocks_" + fileSource + "_" + fileDate + ".txt"
+    output_filename = f"{OUTPUT_FOLDER_TMF}/stocks_{fileSource}_{fileDate}.txt"
 
-    output_list_to_file(OUTPUT_FILENAME, symbolList)
+    output_list_to_file(output_filename, symbolList)
 
 
 def fix_list(symbolList):
@@ -60,9 +60,9 @@ def parseHtmlFile_DA(path, fileName):
     symbolList.sort()
 
     #specify the output file location    
-    OUTPUT_FILENAME = f"./Output/stocks_{tmfFileSource}_{tmfFileDate}.txt"
+    output_filename = f"{OUTPUT_FOLDER_TMF}/stocks_{tmfFileSource}_{tmfFileDate}.txt"
 
-    output_list_to_file(OUTPUT_FILENAME, symbolList)
+    output_list_to_file(output_filename, symbolList)
     
 
 def parseHtmlFile_TMF(path, fileName):
@@ -89,13 +89,13 @@ def parseHtmlFile_TMF(path, fileName):
     symbolList.sort()    
 
     #specify the output file location    
-    OUTPUT_FILENAME = f"./Output/stocks_{tmfFileSource}_{tmfFileDate}.txt"
+    output_filename = f"{OUTPUT_FOLDER_TMF}/stocks_{tmfFileSource}_{tmfFileDate}.txt"
 
-    output_list_to_file(OUTPUT_FILENAME, symbolList)
+    output_list_to_file(output_filename, symbolList)
 
 
-def output_list_to_file(OUTPUT_FILENAME, symbolList):
-    with open(OUTPUT_FILENAME, "w") as txt_file:
+def output_list_to_file(output_filename, symbolList):
+    with open(output_filename, "w") as txt_file:
         for symbol in symbolList:
             txt_file.write(symbol + "\n")
     
@@ -105,7 +105,7 @@ def main():
     scriptName = basename(__file__).split(".")[0]
     log_util(f"{scriptName} started", "INFO")
     
-    path = "./" + INPUT_FOLDER_TMF + "/"  #the folder containing HTML files to parse for The Motley Fool webpages
+    path = f"./{INPUT_FOLDER_TMF}/"  #the folder containing HTML files to parse for The Motley Fool webpages
     files = os.listdir(path)
     
     for fileName in files:
