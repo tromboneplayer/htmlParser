@@ -9,4 +9,6 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 
 OUTPUT_FILENAME = f"./Output/company_data.txt"
 
-USE_YF_LIBRARY = False
+USE_YF_LIBRARY = False  # the yahoo finance library is slower than just retrieving from the website.  Set to true to use the library.
+
+NOT_AVAILABLE = "n/a"

@@ -4,7 +4,7 @@ import json
 import yfinance as yf
 from bs4 import BeautifulSoup 
 from utilities.util import fix_unprintable
-from configs.config import YAHOO_URL_PROFILE, USER_AGENT, USE_YF_LIBRARY
+from configs.config import YAHOO_URL_PROFILE, USER_AGENT, USE_YF_LIBRARY, NOT_AVAILABLE
 
 
 def _get_webpage(symbol):
@@ -24,6 +24,7 @@ def _get_webpage(symbol):
 
 
 def _parse_stock_page_YF(webpage):
+    '''Parse the Yahoo Finance stock page so we can retrieve the json data.'''
     
     soup = BeautifulSoup(webpage.content, 'html.parser', from_encoding='utf-8')
     
@@ -60,16 +61,12 @@ def _get_company_profile_web(symbol: str) -> tuple:
     webpage = _get_webpage(symbol)
     
     if not webpage:
-        sector = "n/a"
-        industry = "n/a"
-        return (symbol, sector, industry)
+        return (symbol, NOT_AVAILABLE, NOT_AVAILABLE)
     
     company_profile = _parse_stock_page_YF(webpage)
     
     if not company_profile:
-        sector = "n/a"
-        industry = "n/a"
-        return (symbol, sector, industry)
+        return (symbol, NOT_AVAILABLE, NOT_AVAILABLE)
     
     try:
         sector = company_profile["sector"]
@@ -77,7 +74,7 @@ def _get_company_profile_web(symbol: str) -> tuple:
         industry = fix_unprintable(industry)
         return (symbol, sector, industry)
     except KeyError as e:
-        return (symbol, "n/a", "n/a")
+        return (symbol, NOT_AVAILABLE, NOT_AVAILABLE)
     except Exception as e:
         print(f"_get_company_profile_web: Exception reading company profile data {e}")
         raise e
@@ -86,15 +83,18 @@ def _get_company_profile_web(symbol: str) -> tuple:
 def _get_company_profile_library(symbol: str) -> tuple:
     '''Get the company profile data using the Yahoo Finance python library.  This is slower than the web method, but an easier implementation.'''
     
-    symbol_data = yf.Ticker(symbol)
+    company_profile = yf.Ticker(symbol)
+
+    if not company_profile:
+        return (symbol, NOT_AVAILABLE, NOT_AVAILABLE)
 
     try:
-        sector = symbol_data.info["sector"]
-        industry = symbol_data.info["industry"]
+        sector = company_profile.info["sector"]
+        industry = company_profile.info["industry"]
         industry = fix_unprintable(industry)
         return (symbol, sector, industry)
     except KeyError as e:
-        return (symbol, "n/a", "n/a")
+        return (symbol, NOT_AVAILABLE, NOT_AVAILABLE)
     except Exception as e:
         msg = f"_get_company_profile_library: Exception reading company profile data {e}"
         print(msg)
