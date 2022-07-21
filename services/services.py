@@ -1,4 +1,4 @@
-from backend_api.yf_web import get_company_profile
+from backend_api.yf_web import get_company_profile_web_api
 
 
 def process_file(symbols_file):
@@ -6,8 +6,7 @@ def process_file(symbols_file):
     
     for symbol in symbols_file:
         symbol = symbol.strip()
-        symbol_data = get_company_profile(symbol)
-
+        symbol_data = get_company_profile_web_api(symbol)
         output_data.append(symbol_data)
     
     return output_data
